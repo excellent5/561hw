@@ -7,7 +7,7 @@ public class GameBoard {
     int[] boards4A, boards4B;
     int holenum;
 
-    public GameBoard(String player1, String player2, String mancala4A, String mancala4B) {
+    public GameBoard(String player2, String player1, String mancala4A, String mancala4B) {
         boards4A = string2intarray(player2, mancala4A, false);
         boards4B = string2intarray(player1, mancala4B, true);
         holenum = boards4A.length - 1;

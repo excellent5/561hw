@@ -20,7 +20,13 @@ public class Minimax {
         int maxvalue = Integer.MIN_VALUE;
         printLog(act, 0, maxvalue);
         GameBoard maxgb = null;
-        for (Action possibleaction : getAllAction(act)) {
+        ArrayList<Action> actioncandidates = getAllAction(act);
+        if (actioncandidates.size() == 0) {
+            endGame(act.gb);
+            printLog(act, 0, new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb));
+            return act.gb;
+        }
+        for (Action possibleaction : actioncandidates) {
             NextState childstate;
             if (possibleaction.freeturn) {
                 childstate = getMax(possibleaction, 1);
