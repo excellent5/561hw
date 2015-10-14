@@ -4,13 +4,13 @@ import java.util.ArrayList;
 /**
  * Created by zhanyang on 15/10/11.
  */
-public class Minimax {
+public class Alpha_Beta {
 
     // if current player is player1
     boolean ifplayer1;
     int cutoff;
 
-    public Minimax(boolean ifplayer1, GameBoard gb, int cutoff) {
+    public Alpha_Beta(boolean ifplayer1, GameBoard gb, int cutoff) {
         this.ifplayer1 = ifplayer1;
         this.cutoff = cutoff;
     }
@@ -18,36 +18,39 @@ public class Minimax {
 
     public GameBoard minimaxDecision(Action act, boolean ifplayer1) {
         int maxvalue = Integer.MIN_VALUE;
-        printLog(act, 0, maxvalue);
+        int a = Integer.MIN_VALUE;
+        int b = Integer.MAX_VALUE;
+        printLog(act, 0, maxvalue, a, b);
         GameBoard maxgb = null;
         ArrayList<Action> actioncandidates = getAllAction(act);
         if (actioncandidates.size() == 0) {
             endGame(act.gb);
-            printLog(act, 0, new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb));
+            printLog(act, 0, new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb) ,a, b);
             return act.gb;
         }
         for (Action possibleaction : actioncandidates) {
             NextState childstate;
             if (possibleaction.freeturn) {
-                childstate = getMax(possibleaction, 1);
+                childstate = getMax(possibleaction, 1, a, b);
             } else {
-                childstate = getMin(possibleaction, 1);
+                childstate = getMin(possibleaction, 1, a, b);
             }
             if (childstate.value > maxvalue) {
                 maxvalue = childstate.value;
                 maxgb = childstate.gb;
             }
-            printLog(act, 0, maxvalue);
+            a = maxvalue;
+            printLog(act, 0, maxvalue, a, b);
         }
         return maxgb;
     }
 
-    public NextState getMax(Action act, int depth) {
+    public NextState getMax(Action act, int depth, int a, int b) {
         ArrayList<Action> actioncandidates = getAllAction(act);
         if (actioncandidates.size() == 0) {
             endGame(act.gb);
             int value = new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb);
-            printLog(act, depth, value);
+            printLog(act, depth, value, a, b);
             return new NextState(act.gb, value);
         }
 
@@ -58,12 +61,12 @@ public class Minimax {
             if (act.freeturn) {
                 v = value;
             } else {
-                printLog(act, depth, value);
+                printLog(act, depth, value, a, b);
                 act.value = value;
                 return new NextState(act.gb, value);
             }
         }
-        printLog(act, depth, v);
+        printLog(act, depth, v, a, b);
 
         for (Action possibleaction : actioncandidates) {
             int childvalue = 0;
@@ -73,30 +76,39 @@ public class Minimax {
                 childdepth = depth;
             }
             if (!possibleaction.freeturn) {
-                ns = getMin(possibleaction, childdepth);
+                ns = getMin(possibleaction, childdepth, a, b);
                 childvalue = ns.value;
             } else {
-                ns = getMax(possibleaction, childdepth);
+                ns = getMax(possibleaction, childdepth, a, b);
                 childvalue = ns.value;
             }
-            if (childvalue > v) {
-                v = childvalue;
-                if (act.freeturn) {
-                    gb = ns.gb;
+
+//            if (childvalue > v) {
+//                v = childvalue;
+//                if (act.freeturn) {
+//                    gb = ns.gb;
+//                }
+//            }
+            v = Math.max(v, childvalue);
+            if(!act.freeturn){
+                if(v>=b){
+                    a = v;
+                    printLog(act, depth, v, a, b);
+                    return new NextState(act.gb, b);
                 }
             }
-//            v = Math.max(v, childvalue);
-            printLog(act, depth, v);
+            a = v;
+            printLog(act, depth, v, a, b);
         }
         return new NextState(gb, v);
     }
 
-    public NextState getMin(Action act, int depth) {
+    public NextState getMin(Action act, int depth, int a, int b) {
         ArrayList<Action> actioncandidates = getAllAction(act);
         if (actioncandidates.size() == 0) {
             endGame(act.gb);
             int value = new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb);
-            printLog(act, depth, value);
+            printLog(act, depth, value, a, b);
             return new NextState(act.gb, value);
         }
 
@@ -107,11 +119,11 @@ public class Minimax {
             if (act.freeturn) {
                 v = value;
             } else {
-                printLog(act, depth, value);
+                printLog(act, depth, value, a, b);
                 return new NextState(act.gb, value);
             }
         }
-        printLog(act, depth, v);
+        printLog(act, depth, v, a, b);
 
         for (Action possibleaction : actioncandidates) {
             int childvalue = 0;
@@ -121,25 +133,34 @@ public class Minimax {
                 childdepth = depth;
             }
             if (!possibleaction.freeturn) {
-                ns = getMax(possibleaction, childdepth);
+                ns = getMax(possibleaction, childdepth, a, b);
                 childvalue = ns.value;
             } else {
-                ns = getMin(possibleaction, childdepth);
+                ns = getMin(possibleaction, childdepth, a, b);
                 childvalue = ns.value;
             }
-            if (childvalue < v) {
-                v = childvalue;
-                if (act.freeturn) {
-                    gb = ns.gb;
+//            if (childvalue < v) {
+//                v = childvalue;
+//                if (act.freeturn) {
+//                    gb = ns.gb;
+//                }
+//            }
+
+            v = Math.min(v, childvalue);
+            if(!act.freeturn){
+                if(v<=a){
+                    b = v;
+                    printLog(act, depth, v, a, b);
+                    return new NextState(act.gb, a);
                 }
             }
-//            v = Math.min(v, childvalue);
-            printLog(act, depth, v);
+            b = v;
+            printLog(act, depth, v, a, b);
         }
         return new NextState(gb, v);
     }
 
-//    one player cannot go any step, put all opponent stone into his mancala
+    //    one player cannot go any step, put all opponent stone into his mancala
     public void endGame(GameBoard gb) {
         int[] nonemptyplayer = (gb.boards4B[0] == 0) ? gb.boards4A : gb.boards4B;
         for (int i = 0; i < nonemptyplayer.length - 1; i++) {
@@ -148,7 +169,7 @@ public class Minimax {
         }
     }
 
-    public void printLog(Action act, int depth, int value) {
+    public String printInfinity(int value){
         String valuestring;
         if (value == Integer.MAX_VALUE) {
             valuestring = "Infinity";
@@ -157,7 +178,11 @@ public class Minimax {
         } else {
             valuestring = Integer.toString(value);
         }
-        String msg = act.turn + "," + depth + "," + valuestring;
+        return valuestring;
+    }
+
+    public void printLog(Action act, int depth, int value, int a, int b) {
+        String msg = act.turn + "," + depth + "," + printInfinity(value) + "," + printInfinity(a) + "," + printInfinity(b);
         System.out.println(msg);
     }
 
