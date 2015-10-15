@@ -83,27 +83,25 @@ public class Alpha_Beta {
                 childvalue = ns.value;
             }
 
-//            if (childvalue > v) {
-//                v = childvalue;
-//                if (act.freeturn) {
-//                    gb = ns.gb;
-//                }
-//            }
-            v = Math.max(v, childvalue);
-            if(!act.freeturn){
-                if(v>=b){
-                    a = v;
-                    printLog(act, depth, v, a, b);
-                    return new NextState(act.gb, b);
+            if (childvalue > v) {
+                v = childvalue;
+                if (act.freeturn) {
+                    gb = ns.gb;
                 }
             }
-            a = v;
+//            v = Math.max(v, childvalue);
+            if(v>=b){
+                printLog(act, depth, v, a, b);
+                return new NextState(act.gb, v);
+            }
+            a = Math.max(v, a);
             printLog(act, depth, v, a, b);
         }
         return new NextState(gb, v);
     }
 
     public NextState getMin(Action act, int depth, int a, int b) {
+        int parenta = a;
         ArrayList<Action> actioncandidates = getAllAction(act);
         if (actioncandidates.size() == 0) {
             endGame(act.gb);
@@ -139,22 +137,19 @@ public class Alpha_Beta {
                 ns = getMin(possibleaction, childdepth, a, b);
                 childvalue = ns.value;
             }
-//            if (childvalue < v) {
-//                v = childvalue;
-//                if (act.freeturn) {
-//                    gb = ns.gb;
-//                }
-//            }
-
-            v = Math.min(v, childvalue);
-            if(!act.freeturn){
-                if(v<=a){
-                    b = v;
-                    printLog(act, depth, v, a, b);
-                    return new NextState(act.gb, a);
+            if (childvalue < v) {
+                v = childvalue;
+                if (act.freeturn) {
+                    gb = ns.gb;
                 }
             }
-            b = v;
+
+//            v = Math.min(v, childvalue);
+            if(v<=a){
+                printLog(act, depth, v, a, b);
+                return new NextState(act.gb, v);
+            }
+            b = Math.min(v, b);
             printLog(act, depth, v, a, b);
         }
         return new NextState(gb, v);
