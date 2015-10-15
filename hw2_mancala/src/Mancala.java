@@ -1,17 +1,56 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Created by zhanyang on 15/10/11.
  */
 public class Mancala {
 
-    public static void main(String[] args)  {
-        boolean ifplayer1 = true;
-        GameBoard gbinstance = new GameBoard("3 3 3 3 3", "3 3 3 3 3", "0", "0");
-//        GameBoard gbinstance = new GameBoard("1 2 3 0", "1 3 2 1", "0", "0");
-//        Minimax mm = new Minimax(ifplayer1, gbinstance, 2);
-        Alpha_Beta mm = new Alpha_Beta(ifplayer1, gbinstance, 2);
-        Action rootact = new Action("root", gbinstance, ifplayer1);
-        GameBoard aaa = mm.minimaxDecision(rootact, ifplayer1);
-        System.out.println("\n\n"+aaa);
+    public static void main(String[] args) throws IOException {
+        if (args[0].equals("-i") && args.length > 1) {
+            // clear the content of existing output.txt
+            FileWriter clearfileobj = new FileWriter("output.txt");
+            clearfileobj.close();
+
+            // read the input file
+            BufferedReader filein = new BufferedReader(new FileReader(args[1]));
+
+            // save the algorithm string, and initialize algorithm instance after getting all information
+            String algorithm = filein.readLine();
+
+            boolean ifplayer1 = true;
+            if (filein.readLine().equals("2")) {
+                ifplayer1 = false;
+            }
+
+            int depth = Integer.parseInt(filein.readLine());
+
+            String board4player2 = filein.readLine();
+            String board4player1 = filein.readLine();
+            String mancala2 = filein.readLine();
+            String mancala1 = filein.readLine();
+            GameBoard gbinstance = new GameBoard(board4player2, board4player1, mancala2, mancala1);
+
+            Action rootact = new Action("root", gbinstance, ifplayer1);
+
+            GameBoard nextstate = null;
+            if (algorithm.equals("1")) {
+                nextstate = new Greedy(ifplayer1, depth).decision(rootact, ifplayer1);
+            } else if (algorithm.equals("2")) {
+                nextstate = new Minimax(ifplayer1, depth).minimaxDecision(rootact, ifplayer1);
+            } else if (algorithm.equals("3")) {
+                nextstate = new Alpha_Beta(ifplayer1, depth).minimaxDecision(rootact, ifplayer1);
+            } else if (algorithm.equals("4")) {
+                // temporarily use minimax for competition
+                nextstate = new Minimax(ifplayer1, depth).minimaxDecision(rootact, ifplayer1);
+            }
+            System.out.println("\n\n" + nextstate);
+        }
+        else {
+            System.out.println("Unacceptable parameter: you should execute by inputting 'java waterflow -i inputfile");
+        }
+
     }
 }

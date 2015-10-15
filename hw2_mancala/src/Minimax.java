@@ -10,7 +10,7 @@ public class Minimax {
     boolean ifplayer1;
     int cutoff;
 
-    public Minimax(boolean ifplayer1, GameBoard gb, int cutoff) {
+    public Minimax(boolean ifplayer1, int cutoff) {
         this.ifplayer1 = ifplayer1;
         this.cutoff = cutoff;
     }

@@ -1,0 +1,6 @@
+out
+*~
+.*
+!.gitignore
+test.java
+myTestCase*.txt
