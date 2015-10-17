@@ -6,64 +6,72 @@ import java.util.ArrayList;
  */
 public class Alpha_Beta {
 
-    // if current player is player1
-    boolean ifplayer1;
+    SearchStrategy search;
+    EvaluationFunc ev;
     int cutoff;
 
-    public Alpha_Beta(boolean ifplayer1, int cutoff) {
-        this.ifplayer1 = ifplayer1;
+    public Alpha_Beta(SearchStrategy search, EvaluationFunc ev, int cutoff) {
+        this.search = search;
+        this.ev = ev;
         this.cutoff = cutoff;
     }
 
 
     public GameBoard minimaxDecision(Action act, boolean ifplayer1) {
-        int maxvalue = Integer.MIN_VALUE;
+//        int maxvalue = Integer.MIN_VALUE;
         int a = Integer.MIN_VALUE;
         int b = Integer.MAX_VALUE;
-        printLog(act, 0, maxvalue, a, b);
-        GameBoard maxgb = null;
-        ArrayList<Action> actioncandidates = getAllAction(act);
-        if (actioncandidates.size() == 0) {
-            endGame(act.gb);
-            printLog(act, 0, new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb) ,a, b);
-            return act.gb;
-        }
-        for (Action possibleaction : actioncandidates) {
-            NextState childstate;
-            if (possibleaction.freeturn) {
-                childstate = getMax(possibleaction, 1, a, b);
-            } else {
-                childstate = getMin(possibleaction, 1, a, b);
-            }
-            if (childstate.value > maxvalue) {
-                maxvalue = childstate.value;
-                maxgb = childstate.gb;
-            }
-            a = maxvalue;
-            printLog(act, 0, maxvalue, a, b);
-        }
-        return maxgb;
+//        printLog(act, 0, maxvalue, a, b);
+//        GameBoard maxgb = null;
+//        ArrayList<Action> actioncandidates = getAllAction(act);
+//        if (actioncandidates.size() == 0) {
+//            endGame(act.gb);
+//            printLog(act, 0, new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb) ,a, b);
+//            return act.gb;
+//        }
+//        for (Action possibleaction : actioncandidates) {
+//            Action childstate;
+//            if (possibleaction.freeturn) {
+//                childstate = getMax(possibleaction, 1, a, b);
+//            } else {
+//                childstate = getMin(possibleaction, 1, a, b);
+//            }
+//            if (childstate.value > maxvalue) {
+//                maxvalue = childstate.value;
+//                maxgb = childstate.gb;
+//            }
+//            a = maxvalue;
+//            printLog(act, 0, maxvalue, a, b);
+//        }
+//        return maxgb;
+        return getMax(act, 0, a, b).gb;
     }
 
-    public NextState getMax(Action act, int depth, int a, int b) {
+    public Action getMax(Action act, int depth, int a, int b) {
         ArrayList<Action> actioncandidates = getAllAction(act);
         if (actioncandidates.size() == 0) {
             endGame(act.gb);
-            int value = new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb);
+            int value = ev.getEvaluationValue(act.gb);
             printLog(act, depth, value, a, b);
-            return new NextState(act.gb, value);
+            return new Action(act.gb, value);
         }
 
         int v = Integer.MIN_VALUE;
         GameBoard gb = act.gb;
         if (depth >= cutoff) {
-            int value = new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb);
-            if (act.freeturn) {
-                v = value;
-            } else {
+//            int value = new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb);
+//            if (act.freeturn) {
+//                v = value;
+//            } else {
+//                printLog(act, depth, value, a, b);
+//                act.value = value;
+//                return new Action(act.gb, value);
+//            }
+            if(!act.freeturn){
+                int value = ev.getEvaluationValue(act.gb);
                 printLog(act, depth, value, a, b);
                 act.value = value;
-                return new NextState(act.gb, value);
+                return new Action(act.gb, value);
             }
         }
         printLog(act, depth, v, a, b);
@@ -71,7 +79,7 @@ public class Alpha_Beta {
         for (Action possibleaction : actioncandidates) {
             int childvalue = 0;
             int childdepth = depth + 1;
-            NextState ns = null;
+            Action ns = null;
             if (act.freeturn) {
                 childdepth = depth;
             }
@@ -85,40 +93,46 @@ public class Alpha_Beta {
 
             if (childvalue > v) {
                 v = childvalue;
-                if (act.freeturn) {
+                if (act.freeturn || act.turn.equals("root")) {
                     gb = ns.gb;
                 }
             }
 //            v = Math.max(v, childvalue);
             if(v>=b){
                 printLog(act, depth, v, a, b);
-                return new NextState(act.gb, v);
+                return new Action(act.gb, v);
             }
             a = Math.max(v, a);
             printLog(act, depth, v, a, b);
         }
-        return new NextState(gb, v);
+        return new Action(gb, v);
     }
 
-    public NextState getMin(Action act, int depth, int a, int b) {
+    public Action getMin(Action act, int depth, int a, int b) {
         int parenta = a;
         ArrayList<Action> actioncandidates = getAllAction(act);
         if (actioncandidates.size() == 0) {
             endGame(act.gb);
-            int value = new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb);
+            int value = ev.getEvaluationValue(act.gb);
             printLog(act, depth, value, a, b);
-            return new NextState(act.gb, value);
+            return new Action(act.gb, value);
         }
 
         int v = Integer.MAX_VALUE;
         GameBoard gb = act.gb;
         if (depth >= cutoff) {
-            int value = new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb);
-            if (act.freeturn) {
-                v = value;
-            } else {
+//            int value = new EvaluationFunc(ifplayer1).getSimpleEvaluation(act.gb);
+//            if (act.freeturn) {
+//                v = value;
+//            } else {
+//                printLog(act, depth, value, a, b);
+//                return new Action(act.gb, value);
+//            }
+            if(!act.freeturn){
+                int value = ev.getEvaluationValue(act.gb);
                 printLog(act, depth, value, a, b);
-                return new NextState(act.gb, value);
+                act.value = value;
+                return new Action(act.gb, value);
             }
         }
         printLog(act, depth, v, a, b);
@@ -126,7 +140,7 @@ public class Alpha_Beta {
         for (Action possibleaction : actioncandidates) {
             int childvalue = 0;
             int childdepth = depth + 1;
-            NextState ns = null;
+            Action ns = null;
             if (act.freeturn) {
                 childdepth = depth;
             }
@@ -139,7 +153,7 @@ public class Alpha_Beta {
             }
             if (childvalue < v) {
                 v = childvalue;
-                if (act.freeturn) {
+                if (act.freeturn || act.turn.equals("root")) {
                     gb = ns.gb;
                 }
             }
@@ -147,12 +161,12 @@ public class Alpha_Beta {
 //            v = Math.min(v, childvalue);
             if(v<=a){
                 printLog(act, depth, v, a, b);
-                return new NextState(act.gb, v);
+                return new Action(act.gb, v);
             }
             b = Math.min(v, b);
             printLog(act, depth, v, a, b);
         }
-        return new NextState(gb, v);
+        return new Action(gb, v);
     }
 
     //    one player cannot go any step, put all opponent stone into his mancala
@@ -218,10 +232,7 @@ public class Alpha_Beta {
                     nextplayer1 = act.ifplayer1;
                 }
 
-                // if it comes to an empty hole in your side
-                // do not care whether opposite is empty or not
-
-//                else if (index < holenum && ownholes[index] == 1 && opponentholes[holenum - index - 1] > 0) {
+                // if it comes to an empty hole in your side, do not care whether opposite is empty or not
                 else if (index < holenum && ownholes[index] == 1) {
                     ownholes[holenum] += opponentholes[holenum - index - 1] + 1;
                     opponentholes[holenum - index - 1] = 0;

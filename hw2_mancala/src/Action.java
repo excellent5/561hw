@@ -10,6 +10,7 @@ public class Action {
     boolean freeturn;
     // who take turn after this action
     boolean ifplayer1;
+    int depth;
     int value;
 
     public Action(String turn, GameBoard gb, boolean freeturn, boolean ifplayer1){
@@ -31,4 +32,17 @@ public class Action {
         this.value = value;
     }
 
+    @Override
+    public String toString() {
+        String valuestring;
+        if (value == Integer.MAX_VALUE) {
+            valuestring = "Infinity";
+        } else if (value == Integer.MIN_VALUE) {
+            valuestring = "-Infinity";
+        } else {
+            valuestring = Integer.toString(value);
+        }
+        String msg = turn + "," + depth + "," + valuestring;
+        return msg;
+    }
 }

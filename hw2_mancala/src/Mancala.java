@@ -34,17 +34,19 @@ public class Mancala {
             GameBoard gbinstance = new GameBoard(board4player2, board4player1, mancala2, mancala1);
 
             Action rootact = new Action("root", gbinstance, ifplayer1);
+            EvaluationFunc ev = new EvaluationFunc(ifplayer1, EvaluationFunc.MANCALADIFF);
+            SearchStrategy search = new SearchStrategy(SearchStrategy.TRAVERSE);
 
             GameBoard nextstate = null;
             if (algorithm.equals("1")) {
-                nextstate = new Greedy(ifplayer1, depth).decision(rootact, ifplayer1);
+                nextstate = new Greedy(search, ev, depth).decision(rootact, ifplayer1);
             } else if (algorithm.equals("2")) {
-                nextstate = new Minimax(ifplayer1, depth).minimaxDecision(rootact, ifplayer1);
+                nextstate = new Minimax(search, ev, depth).minimaxDecision(rootact);
             } else if (algorithm.equals("3")) {
-                nextstate = new Alpha_Beta(ifplayer1, depth).minimaxDecision(rootact, ifplayer1);
+                nextstate = new Alpha_Beta(search, ev, depth).minimaxDecision(rootact, ifplayer1);
             } else if (algorithm.equals("4")) {
                 // temporarily use minimax for competition
-                nextstate = new Minimax(ifplayer1, depth).minimaxDecision(rootact, ifplayer1);
+                nextstate = new Minimax(search, ev, depth).minimaxDecision(rootact);
             }
             System.out.println("\n\n" + nextstate);
         }

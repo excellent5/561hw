@@ -3,15 +3,17 @@
  */
 public class Greedy {
 
-    boolean ifplayer1;
+    SearchStrategy search;
+    EvaluationFunc ev;
     int cutoff;
 
-    public Greedy(boolean ifplayer1, int cutoff) {
-        this.ifplayer1 = ifplayer1;
+    public Greedy(SearchStrategy search, EvaluationFunc ev, int cutoff) {
+        this.search = search;
+        this.ev = ev;
         this.cutoff = cutoff;
     }
 
-    GameBoard decision(Action act, boolean ifplayer1){
-        return new Minimax(ifplayer1, 1).minimaxDecision(act, ifplayer1);
+    public GameBoard decision(Action act, boolean ifplayer1){
+        return new Minimax(search, ev, cutoff).minimaxDecision(act);
     }
 }
