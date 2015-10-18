@@ -27,14 +27,14 @@ public class GameBoard {
             if (!ifplayer1) {
                 index = boardstate.length - i - 1;
             }
-            boardstateinteger[index] = Integer.parseInt(boardstate[index]);
+            boardstateinteger[index] = Integer.parseInt(boardstate[i]);
         }
         boardstateinteger[boardstateinteger.length - 1] = Integer.parseInt(mancala);
         return boardstateinteger;
     }
 
     public boolean ifempty(int[] board) {
-        for (int i = 0; i < board.length; i++) {
+        for (int i = 0; i < board.length - 1; i++) {
             if (board[i] != 0) {
                 return false;
             }
