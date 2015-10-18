@@ -31,6 +31,7 @@ public class Mancala {
             String board4player1 = filein.readLine();
             String mancala2 = filein.readLine();
             String mancala1 = filein.readLine();
+            filein.close();
             GameBoard gbinstance = new GameBoard(board4player2, board4player1, mancala2, mancala1);
 
             Action rootact = new Action("root", gbinstance, false, ifplayer1, 0);
@@ -54,7 +55,6 @@ public class Mancala {
                 nextstate = new Minimax(search, ev, depth, log).decision(rootact);
             }
             log.close();
-            System.out.println("\n\n" + nextstate);
             nstate.write(nextstate.toString());
             nstate.close();
         } else {

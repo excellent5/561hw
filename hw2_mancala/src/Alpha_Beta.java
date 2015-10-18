@@ -38,7 +38,6 @@ public class Alpha_Beta {
         if (act.gb.checkEmpty() || (act.depth >= cutoff && !act.freeturn)) {
             ev.evaluate(act);
             fw.write(act.toAlphaBetaString(a, b) + "\n");
-            System.out.println(act.toAlphaBetaString(a, b));
             return act;
         }
 
@@ -46,7 +45,6 @@ public class Alpha_Beta {
         GameBoard gb = act.gb;
         act.value = v;
         fw.write(act.toAlphaBetaString(a, b) + "\n");
-        System.out.println(act.toAlphaBetaString(a, b));
 
         for (Action possibleaction : actioncandidates) {
             int childvalue;
@@ -69,14 +67,12 @@ public class Alpha_Beta {
 //            prune rest subtrees
             if (v >= b) {
                 fw.write(act.toAlphaBetaString(a, b) + "\n");
-                System.out.println(act.toAlphaBetaString(a, b));
                 return new Action(act.gb, v);
             }
 
 //            Update alpha
             a = Math.max(v, a);
             fw.write(act.toAlphaBetaString(a, b) + "\n");
-            System.out.println(act.toAlphaBetaString(a, b));
         }
         return new Action(gb, v);
     }
@@ -87,7 +83,6 @@ public class Alpha_Beta {
         if (act.gb.checkEmpty() || (act.depth >= cutoff && !act.freeturn)) {
             ev.evaluate(act);
             fw.write(act.toAlphaBetaString(a, b) + "\n");
-            System.out.println(act.toAlphaBetaString(a, b));
             return act;
         }
 
@@ -95,7 +90,6 @@ public class Alpha_Beta {
         GameBoard gb = act.gb;
         act.value = v;
         fw.write(act.toAlphaBetaString(a, b) + "\n");
-        System.out.println(act.toAlphaBetaString(a, b));
 
         for (Action possibleaction : actioncandidates) {
             int childvalue;
@@ -117,12 +111,10 @@ public class Alpha_Beta {
 
             if (v <= a) {
                 fw.write(act.toAlphaBetaString(a, b) + "\n");
-                System.out.println(act.toAlphaBetaString(a, b));
                 return new Action(act.gb, v);
             }
             b = Math.min(v, b);
             fw.write(act.toAlphaBetaString(a, b) + "\n");
-            System.out.println(act.toAlphaBetaString(a, b));
         }
         return new Action(gb, v);
     }

@@ -18,6 +18,6 @@ public class Greedy {
     }
 
     public GameBoard decision(Action act, boolean ifplayer1) {
-        return new Minimax(search, ev, cutoff, fw).decision(act);
+        return new Minimax(search, ev, 1, fw).decision(act);
     }
 }

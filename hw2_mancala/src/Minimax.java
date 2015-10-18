@@ -38,7 +38,6 @@ public class Minimax {
         if (act.gb.checkEmpty() || (act.depth >= cutoff && !act.freeturn)) {
             ev.evaluate(act);
             fw.write(act + "\n");
-            System.out.println(act);
             return act;
         }
 
@@ -46,7 +45,6 @@ public class Minimax {
         GameBoard gb = act.gb;
         act.value = v;
         fw.write(act + "\n");
-        System.out.println(act);
 
         for (Action possibleaction : actioncandidates) {
             int childvalue;
@@ -66,7 +64,6 @@ public class Minimax {
             }
             act.value = v;
             fw.write(act + "\n");
-            System.out.println(act);
         }
         return new Action(gb, v);
     }
@@ -77,7 +74,6 @@ public class Minimax {
         if (act.gb.checkEmpty() || (act.depth >= cutoff && !act.freeturn)) {
             ev.evaluate(act);
             fw.write(act + "\n");
-            System.out.println(act);
             return act;
         }
 
@@ -85,7 +81,6 @@ public class Minimax {
         GameBoard gb = act.gb;
         act.value = v;
         fw.write(act + "\n");
-        System.out.println(act);
 
         for (Action possibleaction : actioncandidates) {
             int childvalue;
@@ -105,7 +100,6 @@ public class Minimax {
             }
             act.value = v;
             fw.write(act + "\n");
-            System.out.println(act);
         }
         return new Action(gb, v);
     }
