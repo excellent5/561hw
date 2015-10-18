@@ -50,12 +50,11 @@ public class GameBoard {
         }
     }
 
-    public boolean checkEmpty(){
-        if(ifempty(boards4A)){
+    public boolean checkEmpty() {
+        if (ifempty(boards4A)) {
             emptyBoard(boards4B);
             return true;
-        }
-        else if(ifempty(boards4B)){
+        } else if (ifempty(boards4B)) {
             emptyBoard(boards4A);
             return true;
         }
@@ -68,11 +67,11 @@ public class GameBoard {
         String boardsa = "";
         String boardsb = "";
         for (int i = 0; i < holenum; i++) {
-            boardsa += Integer.toString(boards4A[holenum - i - 1]) + ",";
-            boardsb += Integer.toString(boards4B[i]) + ",";
+            boardsa += Integer.toString(boards4A[holenum - i - 1]) + " ";
+            boardsb += Integer.toString(boards4B[i]) + " ";
         }
         msg += boardsa.substring(0, boardsa.length() - 1) + "\n" + boardsb.substring(0, boardsb.length() - 1) +
-                "\n" + boards4A[boards4A.length - 1] + "\n" + boards4B[boards4B.length - 1];
+                "\n" + boards4A[boards4A.length - 1] + "\n" + boards4B[boards4B.length - 1] + "\n";
         return msg;
     }
 

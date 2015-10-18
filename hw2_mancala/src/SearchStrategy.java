@@ -56,8 +56,7 @@ public class SearchStrategy {
 //                  get into others owned hole
                     if (index > holenum) {
                         opponentholes[index - holenum - 1]++;
-                    }
-                    else {
+                    } else {
                         ownholes[index]++;
                     }
                 }

@@ -24,15 +24,14 @@ public class Minimax {
     public GameBoard decision(Action act) {
         try {
             return getMax(act).gb;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return act.gb;
         }
     }
 
 
-    public Action getMax(Action act) throws IOException{
+    public Action getMax(Action act) throws IOException {
         ArrayList<Action> actioncandidates = search.searchNextActions(act);
 
 //        check if there exists player whose holes are all empty or the depth arrives cut-off value
@@ -46,7 +45,7 @@ public class Minimax {
         int v = Integer.MIN_VALUE;
         GameBoard gb = act.gb;
         act.value = v;
-        fw.write(act+"\n");
+        fw.write(act + "\n");
         System.out.println(act);
 
         for (Action possibleaction : actioncandidates) {
@@ -66,13 +65,13 @@ public class Minimax {
                 }
             }
             act.value = v;
-            fw.write(act+"\n");
+            fw.write(act + "\n");
             System.out.println(act);
         }
         return new Action(gb, v);
     }
 
-    public Action getMin(Action act) throws IOException{
+    public Action getMin(Action act) throws IOException {
         ArrayList<Action> actioncandidates = search.searchNextActions(act);
 
         if (act.gb.checkEmpty() || (act.depth >= cutoff && !act.freeturn)) {
@@ -85,7 +84,7 @@ public class Minimax {
         int v = Integer.MAX_VALUE;
         GameBoard gb = act.gb;
         act.value = v;
-        fw.write(act+"\n");
+        fw.write(act + "\n");
         System.out.println(act);
 
         for (Action possibleaction : actioncandidates) {
@@ -105,7 +104,7 @@ public class Minimax {
                 }
             }
             act.value = v;
-            fw.write(act+"\n");
+            fw.write(act + "\n");
             System.out.println(act);
         }
         return new Action(gb, v);

@@ -13,14 +13,14 @@ public class EvaluationFunc {
         this.strategy = strategy;
     }
 
-    public void evaluate(Action act){
-        if(strategy == 0){
+    public void evaluate(Action act) {
+        if (strategy == 0) {
             act.value = getMancalaDiff(act.gb);
         }
     }
 
-    public int getEvaluationValue(GameBoard gb){
-        if(strategy == 0){
+    public int getEvaluationValue(GameBoard gb) {
+        if (strategy == 0) {
             return getMancalaDiff(gb);
         }
         return 0;

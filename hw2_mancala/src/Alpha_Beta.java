@@ -26,14 +26,13 @@ public class Alpha_Beta {
         int b = Integer.MAX_VALUE;
         try {
             return getMax(act, a, b).gb;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return act.gb;
         }
     }
 
-    public Action getMax(Action act, int a, int b) throws IOException{
+    public Action getMax(Action act, int a, int b) throws IOException {
         ArrayList<Action> actioncandidates = search.searchNextActions(act);
 
         if (act.gb.checkEmpty() || (act.depth >= cutoff && !act.freeturn)) {
@@ -82,7 +81,7 @@ public class Alpha_Beta {
         return new Action(gb, v);
     }
 
-    public Action getMin(Action act, int a, int b) throws IOException{
+    public Action getMin(Action act, int a, int b) throws IOException {
         ArrayList<Action> actioncandidates = search.searchNextActions(act);
 
         if (act.gb.checkEmpty() || (act.depth >= cutoff && !act.freeturn)) {

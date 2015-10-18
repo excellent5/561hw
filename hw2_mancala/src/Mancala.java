@@ -43,19 +43,21 @@ public class Mancala {
             if (algorithm.equals("1")) {
                 nextstate = new Greedy(search, ev, depth, log).decision(rootact, ifplayer1);
             } else if (algorithm.equals("2")) {
+                log.write("Node,Depth,Value" + "\n");
                 nextstate = new Minimax(search, ev, depth, log).decision(rootact);
             } else if (algorithm.equals("3")) {
+                log.write("Node,Depth,Value,Alpha,Beta" + "\n");
                 nextstate = new Alpha_Beta(search, ev, depth, log).decision(rootact);
             } else if (algorithm.equals("4")) {
                 // temporarily use minimax for competition
+                log.write("Node,Depth,Value" + "\n");
                 nextstate = new Minimax(search, ev, depth, log).decision(rootact);
             }
             log.close();
             System.out.println("\n\n" + nextstate);
             nstate.write(nextstate.toString());
             nstate.close();
-        }
-        else {
+        } else {
             System.out.println("Unacceptable parameter: you should execute by inputting 'java waterflow -i inputfile");
         }
 

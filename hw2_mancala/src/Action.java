@@ -28,7 +28,7 @@ public class Action {
         this.value = value;
     }
 
-    public String printInfinity(int value){
+    public String printInfinity(int value) {
         String valuestring;
         if (value == Integer.MAX_VALUE) {
             valuestring = "Infinity";
