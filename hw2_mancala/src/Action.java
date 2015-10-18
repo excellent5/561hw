@@ -14,7 +14,7 @@ public class Action {
     int depth;
     int value;
 
-    public Action(String turn, GameBoard gb, boolean freeturn, boolean ifplayer1, int depth){
+    public Action(String turn, GameBoard gb, boolean freeturn, boolean ifplayer1, int depth) {
         this.turn = turn;
         this.gb = gb;
         this.freeturn = freeturn;
@@ -23,13 +23,12 @@ public class Action {
     }
 
 
-    public Action(GameBoard gb, int value){
+    public Action(GameBoard gb, int value) {
         this.gb = gb;
         this.value = value;
     }
 
-    @Override
-    public String toString() {
+    public String printInfinity(int value){
         String valuestring;
         if (value == Integer.MAX_VALUE) {
             valuestring = "Infinity";
@@ -38,7 +37,16 @@ public class Action {
         } else {
             valuestring = Integer.toString(value);
         }
-        String msg = turn + "," + depth + "," + valuestring;
+        return valuestring;
+    }
+
+    @Override
+    public String toString() {
+        String msg = turn + "," + depth + "," + printInfinity(value);
         return msg;
+    }
+
+    public String toAlphaBetaString(int a, int b) {
+        return toString() + "," + printInfinity(a) + "," + printInfinity(b);
     }
 }

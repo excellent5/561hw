@@ -17,7 +17,7 @@ public class Minimax {
     }
 
 
-    public GameBoard minimaxDecision(Action act) {
+    public GameBoard decision(Action act) {
         return getMax(act).gb;
     }
 
@@ -48,6 +48,7 @@ public class Minimax {
             childvalue = ns.value;
             if (childvalue > v) {
                 v = childvalue;
+//                If current step is freeturn or root, store the gameboard of next step instead
                 if (act.freeturn || act.turn.equals("root")) {
                     gb = ns.gb;
                 }

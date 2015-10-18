@@ -41,12 +41,12 @@ public class Mancala {
             if (algorithm.equals("1")) {
                 nextstate = new Greedy(search, ev, depth).decision(rootact, ifplayer1);
             } else if (algorithm.equals("2")) {
-                nextstate = new Minimax(search, ev, depth).minimaxDecision(rootact);
+                nextstate = new Minimax(search, ev, depth).decision(rootact);
             } else if (algorithm.equals("3")) {
-                nextstate = new Alpha_Beta(search, ev, depth).minimaxDecision(rootact, ifplayer1);
+                nextstate = new Alpha_Beta(search, ev, depth).decision(rootact);
             } else if (algorithm.equals("4")) {
                 // temporarily use minimax for competition
-                nextstate = new Minimax(search, ev, depth).minimaxDecision(rootact);
+                nextstate = new Minimax(search, ev, depth).decision(rootact);
             }
             System.out.println("\n\n" + nextstate);
         }
