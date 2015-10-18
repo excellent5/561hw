@@ -10,12 +10,12 @@ public class SearchStrategy {
 
     int strategy = 0;
 
-    public SearchStrategy(int strategy){
+    public SearchStrategy(int strategy) {
         this.strategy = strategy;
     }
 
-    public ArrayList<Action> searchNextActions(Action currentact){
-        if(strategy == 0){
+    public ArrayList<Action> searchNextActions(Action currentact) {
+        if (strategy == 0) {
             return getAllAction(currentact);
         }
         return null;
@@ -28,10 +28,14 @@ public class SearchStrategy {
         ArrayList<Action> possibleactions = new ArrayList<>();
 
         for (int count = 0; count < holenum; count++) {
+            // the next hole index to choose, when it's player2's turn, i doesn't equal to count
             int i;
+            String turn;
             GameBoard gb = act.gb.clone();
             boolean freeturn = false;
             boolean nextplayer1 = !act.ifplayer1;
+            int depth = (act.freeturn) ? act.depth : act.depth + 1;
+
             if (act.ifplayer1) {
                 ownholes = gb.boards4B;
                 opponentholes = gb.boards4A;
@@ -53,11 +57,9 @@ public class SearchStrategy {
                     if (index > holenum) {
                         opponentholes[index - holenum - 1]++;
                     }
-                    //        get into your holes
                     else {
                         ownholes[index]++;
                     }
-//                    changeGameBoard(index, ownholes, opponentholes, holenum);
                 }
 
                 // if it comes to own Mancala
@@ -66,25 +68,21 @@ public class SearchStrategy {
                     nextplayer1 = act.ifplayer1;
                 }
 
-                // if it comes to an empty hole in your side
-                // do not care whether opposite is empty or not
-
+                // if it comes to an empty hole in your side, do not care whether opposite is empty or not
                 else if (index < holenum && ownholes[index] == 1) {
                     ownholes[holenum] += opponentholes[holenum - index - 1] + 1;
                     opponentholes[holenum - index - 1] = 0;
                     ownholes[index] = 0;
                 }
 
-                String turn = generateActionName(i, act.ifplayer1, holenum);
-                possibleactions.add(new Action(turn, gb, freeturn, nextplayer1));
+                turn = generateActionName(i, act.ifplayer1, holenum);
+                possibleactions.add(new Action(turn, gb, freeturn, nextplayer1, depth));
             }
         }
+
         return possibleactions;
     }
 
-//    public void changeGameBoard(int index, int[] ownholes, int[] opponentholes, int holenum) {
-//
-//    }
 
     public String generateActionName(int index, boolean ifplayer1, int holenum) {
         String name = "";
@@ -95,4 +93,5 @@ public class SearchStrategy {
         }
         return name;
     }
+
 }

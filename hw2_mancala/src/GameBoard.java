@@ -33,6 +33,35 @@ public class GameBoard {
         return boardstateinteger;
     }
 
+    public boolean ifempty(int[] board) {
+        for (int i = 0; i < board.length; i++) {
+            if (board[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //    one player cannot go any step, put all opponent stone into his mancala
+    public void emptyBoard(int[] board) {
+        for (int i = 0; i < board.length - 1; i++) {
+            board[board.length - 1] += board[i];
+            board[i] = 0;
+        }
+    }
+
+    public boolean checkEmpty(){
+        if(ifempty(boards4A)){
+            emptyBoard(boards4B);
+            return true;
+        }
+        else if(ifempty(boards4B)){
+            emptyBoard(boards4A);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         String msg = "";

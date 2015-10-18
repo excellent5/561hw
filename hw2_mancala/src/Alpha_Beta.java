@@ -240,7 +240,7 @@ public class Alpha_Beta {
                 }
 
                 String turn = generateActionName(i, act.ifplayer1, holenum);
-                possibleactions.add(new Action(turn, gb, freeturn, nextplayer1));
+                possibleactions.add(new Action(turn, gb, freeturn, nextplayer1, -1));
             }
         }
         return possibleactions;

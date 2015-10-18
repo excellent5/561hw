@@ -33,7 +33,7 @@ public class Mancala {
             String mancala1 = filein.readLine();
             GameBoard gbinstance = new GameBoard(board4player2, board4player1, mancala2, mancala1);
 
-            Action rootact = new Action("root", gbinstance, ifplayer1);
+            Action rootact = new Action("root", gbinstance, false, ifplayer1, 0);
             EvaluationFunc ev = new EvaluationFunc(ifplayer1, EvaluationFunc.MANCALADIFF);
             SearchStrategy search = new SearchStrategy(SearchStrategy.TRAVERSE);
 

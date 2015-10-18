@@ -4,3 +4,4 @@ out
 !.gitignore
 test.java
 myTestCase*.txt
+output.txt
