@@ -11,7 +11,7 @@ public class Mancala {
     public static void main(String[] args) throws IOException {
         if (args[0].equals("-i") && args.length > 1) {
             // clear the content of existing output.txt
-            FileWriter clearfileobj = new FileWriter("output.txt");
+            FileWriter clearfileobj = new FileWriter("traverse_log.txt");
             clearfileobj.close();
 
             // read the input file
@@ -36,19 +36,24 @@ public class Mancala {
             Action rootact = new Action("root", gbinstance, false, ifplayer1, 0);
             EvaluationFunc ev = new EvaluationFunc(ifplayer1, EvaluationFunc.MANCALADIFF);
             SearchStrategy search = new SearchStrategy(SearchStrategy.TRAVERSE);
+            FileWriter log = new FileWriter("traverse_log.txt", true);
+            FileWriter nstate = new FileWriter("next_state.txt");
 
             GameBoard nextstate = null;
             if (algorithm.equals("1")) {
-                nextstate = new Greedy(search, ev, depth).decision(rootact, ifplayer1);
+                nextstate = new Greedy(search, ev, depth, log).decision(rootact, ifplayer1);
             } else if (algorithm.equals("2")) {
-                nextstate = new Minimax(search, ev, depth).decision(rootact);
+                nextstate = new Minimax(search, ev, depth, log).decision(rootact);
             } else if (algorithm.equals("3")) {
-                nextstate = new Alpha_Beta(search, ev, depth).decision(rootact);
+                nextstate = new Alpha_Beta(search, ev, depth, log).decision(rootact);
             } else if (algorithm.equals("4")) {
                 // temporarily use minimax for competition
-                nextstate = new Minimax(search, ev, depth).decision(rootact);
+                nextstate = new Minimax(search, ev, depth, log).decision(rootact);
             }
+            log.close();
             System.out.println("\n\n" + nextstate);
+            nstate.write(nextstate.toString());
+            nstate.close();
         }
         else {
             System.out.println("Unacceptable parameter: you should execute by inputting 'java waterflow -i inputfile");

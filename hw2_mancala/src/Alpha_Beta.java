@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -9,25 +11,34 @@ public class Alpha_Beta {
     SearchStrategy search;
     EvaluationFunc ev;
     int cutoff;
+    FileWriter fw;
 
-    public Alpha_Beta(SearchStrategy search, EvaluationFunc ev, int cutoff) {
+    public Alpha_Beta(SearchStrategy search, EvaluationFunc ev, int cutoff, FileWriter fw) {
         this.search = search;
         this.ev = ev;
         this.cutoff = cutoff;
+        this.fw = fw;
     }
 
 
     public GameBoard decision(Action act) {
         int a = Integer.MIN_VALUE;
         int b = Integer.MAX_VALUE;
-        return getMax(act, a, b).gb;
+        try {
+            return getMax(act, a, b).gb;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return act.gb;
+        }
     }
 
-    public Action getMax(Action act, int a, int b) {
+    public Action getMax(Action act, int a, int b) throws IOException{
         ArrayList<Action> actioncandidates = search.searchNextActions(act);
 
         if (act.gb.checkEmpty() || (act.depth >= cutoff && !act.freeturn)) {
             ev.evaluate(act);
+            fw.write(act.toAlphaBetaString(a, b) + "\n");
             System.out.println(act.toAlphaBetaString(a, b));
             return act;
         }
@@ -35,6 +46,7 @@ public class Alpha_Beta {
         int v = Integer.MIN_VALUE;
         GameBoard gb = act.gb;
         act.value = v;
+        fw.write(act.toAlphaBetaString(a, b) + "\n");
         System.out.println(act.toAlphaBetaString(a, b));
 
         for (Action possibleaction : actioncandidates) {
@@ -57,22 +69,25 @@ public class Alpha_Beta {
 
 //            prune rest subtrees
             if (v >= b) {
+                fw.write(act.toAlphaBetaString(a, b) + "\n");
                 System.out.println(act.toAlphaBetaString(a, b));
                 return new Action(act.gb, v);
             }
 
 //            Update alpha
             a = Math.max(v, a);
+            fw.write(act.toAlphaBetaString(a, b) + "\n");
             System.out.println(act.toAlphaBetaString(a, b));
         }
         return new Action(gb, v);
     }
 
-    public Action getMin(Action act, int a, int b) {
+    public Action getMin(Action act, int a, int b) throws IOException{
         ArrayList<Action> actioncandidates = search.searchNextActions(act);
 
         if (act.gb.checkEmpty() || (act.depth >= cutoff && !act.freeturn)) {
             ev.evaluate(act);
+            fw.write(act.toAlphaBetaString(a, b) + "\n");
             System.out.println(act.toAlphaBetaString(a, b));
             return act;
         }
@@ -80,6 +95,7 @@ public class Alpha_Beta {
         int v = Integer.MAX_VALUE;
         GameBoard gb = act.gb;
         act.value = v;
+        fw.write(act.toAlphaBetaString(a, b) + "\n");
         System.out.println(act.toAlphaBetaString(a, b));
 
         for (Action possibleaction : actioncandidates) {
@@ -101,10 +117,12 @@ public class Alpha_Beta {
             act.value = v;
 
             if (v <= a) {
+                fw.write(act.toAlphaBetaString(a, b) + "\n");
                 System.out.println(act.toAlphaBetaString(a, b));
                 return new Action(act.gb, v);
             }
             b = Math.min(v, b);
+            fw.write(act.toAlphaBetaString(a, b) + "\n");
             System.out.println(act.toAlphaBetaString(a, b));
         }
         return new Action(gb, v);
