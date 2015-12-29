@@ -69,6 +69,7 @@ public class SearchStrategy {
 
                 // if it comes to an empty hole in your side, do not care whether opposite is empty or not
                 else if (index < holenum && ownholes[index] == 1) {
+//                else if (index < holenum && ownholes[index] == 1 && opponentholes[holenum - index - 1] > 0) {
                     ownholes[holenum] += opponentholes[holenum - index - 1] + 1;
                     opponentholes[holenum - index - 1] = 0;
                     ownholes[index] = 0;
